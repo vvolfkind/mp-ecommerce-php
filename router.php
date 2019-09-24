@@ -7,6 +7,7 @@ if(!$_POST || empty($_POST))
 {
     header('Location: ./index.php');
 }
+
 $payment_id = $_POST['payment_id'];
 $merchant_order_id = $_POST['merchant_order_id'];
 
