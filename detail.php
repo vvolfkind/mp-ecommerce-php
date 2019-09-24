@@ -1,3 +1,70 @@
+<?php
+// SDK de Mercado Pago
+require __DIR__ .  '/vendor/autoload.php';
+
+if(!$_POST) {
+    header('Location: index.php');
+}
+$token = "APP_USR-6317427424180639-090914-5c508e1b02a34fcce879a999574cf5c9-469485398";
+MercadoPago\SDK::setAccessToken($token);
+
+$preference = new MercadoPago\Preference();
+
+// Crea un ítem en la preferencia
+$item = new MercadoPago\Item();
+$item->title = $_POST['title'];
+$item->description = "Dispositivo móvil de Tienda e-commerce";
+$item->picture_url = $_POST['img'];
+$item->quantity = 1;
+$item->unit_price = $_POST['price'];
+
+
+$payer = new MercadoPago\Payer();
+$payer->name = "Lalo";
+$payer->surname = "Landa";
+$payer->email = "test_user_63274575@testuser.com";
+$payer->date_created = "";
+$payer->phone = array(
+    "area_code" => "011",
+    "number" => "2222 3333"
+);
+$payer->identification = array(
+    "type" => "DNI",
+    "number" => "22333444"
+);  
+$payer->address = array(
+    "street_name" => "Falsa",
+    "street_number" => 123,
+    "zip_code" => "1111"
+);
+
+$preference->items = array($item);
+$preference->payer = $payer;
+
+$preference->external_reference = "ABCD1234";
+$preference->back_urls = array(
+    "success" => "http://localhost/code/mp-ecommerce-php/success.php",
+    "failure" => "http://localhost/code/mp-ecommerce-php/error.php",
+    "pending" => "http://localhost/code/mp-ecommerce-php/pending.php"
+);
+$preference->auto_return = "all";
+
+$preference->payment_methods = array(
+  "excluded_payment_methods" => array(
+    array("id" => "amex"),
+    array("id" => "atm")
+  ),
+  "excluded_payment_types" => array(
+    array("id" => "atm")
+  ),
+  "installments" => 6
+);
+
+
+$preference->save();
+
+?>
+
 <!DOCTYPE html>
 <html class="supports-animation supports-columns svg no-touch no-ie no-oldie no-ios supports-backdrop-filter as-mouseuser" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
@@ -13,6 +80,7 @@
     crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="./assets/category-landing.css" media="screen, print">
+data-button-label="Comprar"
 
     <link rel="stylesheet" href="./assets/category.css" media="screen, print">
 
@@ -124,13 +192,17 @@
                                             </h3>
                                         </div>
                                         <h3 >
-                                            <?php echo $_POST['price'] ?>
+                                            <?php echo "$" . $_POST['price'] ?>
                                         </h3>
                                         <h3 >
-                                            <?php echo "$" . $_POST['unit'] ?>
+                                            <?php echo "Unidades: " . $_POST['unit'] ?>
                                         </h3>
                                     </div>
-                                    <button type="submit" class="mercadopago-button" formmethod="post">Pagar</button>
+                                    <form action="./router.php" method="POST">
+                                        <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
+                                        data-preference-id="<?php echo $preference->id; ?>" data-elements-color="#2D3277"  data-button-label="Pagar la compra">
+                                        </script>
+                                    </form>
                                 </div>
                             </div>
                         </div>
