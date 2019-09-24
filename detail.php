@@ -43,9 +43,9 @@ $preference->payer = $payer;
 
 $preference->external_reference = "ABCD1234";
 $preference->back_urls = array(
-    "success" => "https://vvolfkind-mp-commerce-php.herokuapp.com/success.php",
-    "failure" => "https://vvolfkind-mp-commerce-php.herokuapp.com/error.php",
-    "pending" => "https://vvolfkind-mp-commerce-php.herokuapp.com/pending.php"
+    "success" => "http://localhost/code/mp-ecommerce-php/success.php",
+    "failure" => "http://localhost/code/mp-ecommerce-php/error.php",
+    "pending" => "http://localhost/code/mp-ecommerce-php/pending.php"
 );
 $preference->auto_return = "all";
 
